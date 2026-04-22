@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install duckdb==1.0.0 dbt-core==1.8.4 dbt-duckdb==1.8.4 dbt-expectations==0.10.3
+          pip install duckdb==1.0.0 dbt-core==1.8.4 dbt-duckdb==1.8.4
 
       - name: Create sample database for CI
         run: |
