@@ -33,11 +33,11 @@ jobs:
           con.execute("""
             CREATE TABLE gold.fct_trips AS
             SELECT
-              1 AS trip_id, 1 AS vendor_id,
-              TIMESTAMP '2023-01-15 08:30:00' AS pickup_at,
-              TIMESTAMP '2023-01-15 08:55:00' AS dropoff_at,
+              1 AS trip_id, 1 AS VendorID,
+              TIMESTAMP '2023-01-15 08:30:00' AS tpep_pickup_datetime,
+              TIMESTAMP '2023-01-15 08:55:00' AS tpep_dropoff_datetime,
               2 AS passenger_count, 3.5 AS trip_distance,
-              161 AS pickup_location_id, 236 AS dropoff_location_id,
+              161 AS PULocationID, 236 AS DOLocationID,
               1 AS payment_type, 14.5 AS fare_amount,
               2.5 AS tip_amount, 18.8 AS total_amount,
               25.0 AS trip_duration_minutes, 8.4 AS speed_mph,
