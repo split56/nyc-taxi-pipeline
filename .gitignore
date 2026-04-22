@@ -1,0 +1,10 @@
+venv/
+*.db
+data/
+__pycache__/
+.DS_Store
+target/
+dbt_packages/
+logs/
+gx/uncommitted/
+.env

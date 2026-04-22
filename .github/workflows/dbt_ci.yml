@@ -1,0 +1,72 @@
+name: dbt CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  dbt-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install duckdb==1.0.0 dbt-core==1.8.4 dbt-duckdb==1.8.4 dbt-expectations==0.10.3
+
+      - name: Create sample database for CI
+        run: |
+          python - <<'EOF'
+          import duckdb
+          con = duckdb.connect("taxi.db")
+          con.execute("CREATE SCHEMA IF NOT EXISTS gold")
+          con.execute("""
+            CREATE TABLE gold.fct_trips AS
+            SELECT
+              1 AS trip_id, 1 AS vendor_id,
+              TIMESTAMP '2023-01-15 08:30:00' AS pickup_at,
+              TIMESTAMP '2023-01-15 08:55:00' AS dropoff_at,
+              2 AS passenger_count, 3.5 AS trip_distance,
+              161 AS pickup_location_id, 236 AS dropoff_location_id,
+              1 AS payment_type, 14.5 AS fare_amount,
+              2.5 AS tip_amount, 18.8 AS total_amount,
+              25.0 AS trip_duration_minutes, 8.4 AS speed_mph,
+              5.37 AS total_amount_per_mile, 8 AS pickup_hour,
+              2 AS pickup_day_of_week, false AS is_weekend,
+              2023 AS pickup_year, 1 AS pickup_month
+          """)
+          con.execute("""
+            CREATE TABLE gold.fct_hourly_summary AS
+            SELECT 2023 AS pickup_year, 1 AS pickup_month,
+              2 AS pickup_day_of_week, 8 AS pickup_hour,
+              100 AS trip_count, 14.5 AS avg_fare,
+              3.5 AS avg_distance, 25.0 AS avg_duration,
+              1450.0 AS total_revenue, 2.5 AS avg_tip
+          """)
+          con.execute("""
+            CREATE TABLE gold.dim_time AS
+            SELECT 8 AS hour, 'Morning' AS time_of_day, true AS is_rush_hour
+          """)
+          con.execute("""
+            CREATE TABLE gold.dim_payment AS
+            SELECT 1 AS payment_type_id, 'Credit card' AS payment_type_name
+          """)
+          con.close()
+          EOF
+
+      - name: Run dbt
+        run: |
+          cd dbt_project
+          dbt deps
+          dbt run --profiles-dir .
+          dbt test --profiles-dir .

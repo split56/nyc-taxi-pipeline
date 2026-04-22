@@ -1,0 +1,10 @@
+pyspark==3.5.1
+duckdb==1.0.0
+dbt-core==1.8.4
+dbt-duckdb==1.8.4
+great-expectations==0.18.19
+dbt-expectations==0.10.4
+streamlit
+pandas
+pyarrow
+requests

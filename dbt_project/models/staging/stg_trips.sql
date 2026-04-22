@@ -1,0 +1,22 @@
+SELECT
+    trip_id,
+    VendorID AS vendor_id,
+    tpep_pickup_datetime AS pickup_at,
+    tpep_dropoff_datetime AS dropoff_at,
+    passenger_count,
+    trip_distance,
+    PULocationID AS pickup_location_id,
+    DOLocationID AS dropoff_location_id,
+    payment_type,
+    fare_amount,
+    tip_amount,
+    total_amount,
+    trip_duration_minutes,
+    speed_mph,
+    total_amount_per_mile,
+    pickup_hour,
+    pickup_day_of_week,
+    is_weekend,
+    pickup_year,
+    pickup_month
+FROM gold.fct_trips

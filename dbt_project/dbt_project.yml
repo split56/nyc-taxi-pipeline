@@ -1,0 +1,16 @@
+name: 'nyc_taxi_pipeline'
+version: '1.0.0'
+profile: 'nyc_taxi_pipeline'
+
+model-paths: ["models"]
+test-paths: ["tests"]
+
+models:
+  nyc_taxi_pipeline:
+    staging:
+      +materialized: view
+    intermediate:
+      +materialized: view
+    mart:
+      +materialized: table
+

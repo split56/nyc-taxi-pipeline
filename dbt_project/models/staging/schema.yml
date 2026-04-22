@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: stg_trips
+    columns:
+      - name: trip_id
+        tests:
+          - not_null
+          - unique
+
+      - name: fare_amount
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 1000
+
+      - name: trip_distance
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 200
+
+      - name: trip_duration_minutes
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+              max_value: 300
+
+      - name: payment_type
+        tests:
+          - accepted_values:
+              values: [0, 1, 2, 3, 4, 5]
+
+      - name: pickup_hour
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 23
+
+      - name: passenger_count
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+              max_value: 9

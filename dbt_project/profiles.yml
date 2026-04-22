@@ -1,0 +1,7 @@
+nyc_taxi_pipeline:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: ../taxi.db
+      schema: analytics
